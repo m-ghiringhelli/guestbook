@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useLocation, useHistory } from 'react-router-dom';
 import { signInUser, signUpUser } from '../../services/user';
 import style from './Login.css';
 
@@ -6,15 +7,17 @@ export default function Login() {
   const [authType, setAuthType] = useState('signin');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const history = useHistory();
+  const location = useLocation();
+
+  const { from } = location.state || { from: { pathname: '/' } };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('clicked');
-    console.log('email', email);
-    console.log('password', password);
     authType === 'signin' ?
       signInUser({ email, password }) :
       signUpUser({ email, password })
+    history.replace(from);
   }
 
   return (

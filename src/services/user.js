@@ -11,7 +11,7 @@ export function getSession() {
 export async function signInUser({ email, password }) {
   const { user, error } = await client.auth.signIn({ email, password });
   if (error) throw error;
-  console.log(user);
+
   return user;
 }
 
