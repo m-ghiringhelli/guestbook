@@ -1,8 +1,21 @@
 import React, { useState } from 'react';
+import { signInUser, signUpUser } from '../../services/user';
 import style from './Login.css';
 
 export default function Login() {
   const [authType, setAuthType] = useState('signin');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log('clicked');
+    console.log('email', email);
+    console.log('password', password);
+    authType === 'signin' ?
+      signInUser({ email, password }) :
+      signUpUser({ email, password })
+  }
 
   return (
     <>
@@ -21,13 +34,18 @@ export default function Login() {
           </p>
         </>
       )}
-      <form className={style.authForm}>
+      <form 
+        className={style.authForm}
+        onSubmit={handleSubmit}
+      >
         <label>
           <input
             id='email'
             name='email'
             type='email'
             placeholder='Email address'
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
         </label>
         <label>
@@ -36,6 +54,8 @@ export default function Login() {
             name='password'
             type='password'
             placeholder='Password'
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
         </label>
         <button>Submit</button>
