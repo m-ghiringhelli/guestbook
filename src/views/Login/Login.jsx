@@ -17,7 +17,7 @@ export default function Login() {
         <>
           <p>Create an account</p>
           <p>Not your first rodeo?
-            <span onClick={() => setAuthType('signin')}> Click here to sign-in to your account</span>
+            <span onClick={() => setAuthType('signin')}> Sign-in to your account</span>
           </p>
         </>
       )}
