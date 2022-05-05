@@ -38,6 +38,7 @@ export default function Login() {
             placeholder='Password'
           />
         </label>
+        <button>Submit</button>
       </form>
     </>
   )
