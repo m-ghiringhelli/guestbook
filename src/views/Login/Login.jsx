@@ -8,6 +8,7 @@ export default function Login() {
   const [authType, setAuthType] = useState('signin');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const auth = useAuth();
   const history = useHistory();
   const location = useLocation();
@@ -16,34 +17,41 @@ export default function Login() {
 
   auth.user && history.replace(from);
   
+  // need to refactor to clear up some duplicate code
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (authType === 'signin') {
-      const authedUser = await signInUser({ email, password });
-      auth.setUser(authedUser.email);
-    } else {
-      const authedUser = await signUpUser({ email, password });
-      auth.setUser(authedUser.email);
+    try {
+      if (authType === 'signin') {
+        const authedUser = await signInUser({ email, password });
+        console.log(authedUser);
+        auth.setUser(authedUser.email);
+      } else {
+        const authedUser = await signUpUser({ email, password });
+        auth.setUser(authedUser.email);
+      }
+    } catch (error) {
+      setErrorMessage(error.message);
     }
   }
 
   return (
-    <>
+    <div className={style.auth}>
       {authType === 'signin' ? (
-        <>
+        <div className={style.authFormHeader}>
           <p>Sign into your account</p>
           <p>Are you new around here? 
             <span onClick={() => setAuthType('signup')}> Click here to create an account</span>
           </p>
-        </>
+        </div>
       ) : ( 
-        <>
+        <div className={style.authFormHeader}>
           <p>Create an account</p>
           <p>Not your first rodeo?
             <span onClick={() => setAuthType('signin')}> Sign-in to your account</span>
           </p>
-        </>
+        </div>
       )}
+      <p>{errorMessage}</p>
       <form 
         className={style.authForm}
         onSubmit={handleSubmit}
@@ -70,6 +78,6 @@ export default function Login() {
         </label>
         <button>Submit</button>
       </form>
-    </>
+    </div>
   )
 }
