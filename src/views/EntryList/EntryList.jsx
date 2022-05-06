@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react'
+import { useAuth } from '../../hooks/useAuth';
 import { getEntries } from '../../services/entries'
 
 export default function EntryList() {
   const [entries, setEntries] = useState([]);
+  const auth = useAuth;
 
   useEffect(() => {
     const getData = async () => {

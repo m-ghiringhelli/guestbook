@@ -13,7 +13,8 @@ export default function Login() {
   const location = useLocation();
 
   const { from } = location.state || { from: { pathname: '/' } };
-  console.log(auth);
+
+  auth.user && history.replace(from);
   
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -24,7 +25,6 @@ export default function Login() {
       const authedUser = await signUpUser({ email, password });
       auth.setUser(authedUser.email);
     }
-    auth.user && history.replace(from);
   }
 
   return (
