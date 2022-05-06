@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react'
+import { useLocation } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
-import { getEntries } from '../../services/entries'
+import { addEntry, getEntries } from '../../services/entries'
 
 export default function EntryList() {
   const [entries, setEntries] = useState([]);
   const [newEntry, setNewEntry] = useState('');
-  const auth = useAuth;
-
+  const location = useLocation();
+  const auth = useAuth();
+  
   useEffect(() => {
     const getData = async () => {
       const { data } = await getEntries();
@@ -14,12 +16,20 @@ export default function EntryList() {
       setEntries(data);
     }
     getData();
-  }, [entries])
+  }, [])
+
+  const handleSave = async (entry) => {
+    try {
+      await addEntry(entry);
+    } catch (e) {
+      console.log(e.message);
+    }
+  }
 
   return (
     <>
       <textarea onChange={(e) => setNewEntry(e.target.value)} />
-      <button />
+      <button onClick={() => handleSave(newEntry)}>Add entry</button>
       {entries.map((entry) => (
         <div key={entry.id}>
           <p>{entry.content}</p>

@@ -6,6 +6,6 @@ export async function getEntries() {
 }
 
 export async function addEntry(entry) {
-  const request = await client.from('entries').insert([{ content: entry }]);
+  const request = await client.from('entries').insert({ content: entry });
   return request;
 }

@@ -28,6 +28,8 @@ export default function Login() {
         auth.setUser(authedUser.email);
         history.replace(from);
       }
+      location.state = auth.user;
+      console.log('location', location);
     } catch (error) {
       setErrorMessage(error.message);
     }
