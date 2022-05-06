@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
+import { useAuth } from '../../hooks/useAuth';
 import { signInUser, signUpUser } from '../../services/user';
 import style from './Login.css';
 
@@ -7,17 +8,23 @@ export default function Login() {
   const [authType, setAuthType] = useState('signin');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const auth = useAuth();
   const history = useHistory();
   const location = useLocation();
 
   const { from } = location.state || { from: { pathname: '/' } };
-
+  console.log(auth);
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
-    authType === 'signin' ?
-      signInUser({ email, password }) :
-      signUpUser({ email, password })
-    history.replace(from);
+    if (authType === 'signin') {
+      const authedUser = await signInUser({ email, password });
+      auth.setUser(authedUser.email);
+    } else {
+      const authedUser = await signUpUser({ email, password });
+      auth.setUser(authedUser.email);
+    }
+    auth.user && history.replace(from);
   }
 
   return (
