@@ -4,6 +4,7 @@ import { getEntries } from '../../services/entries'
 
 export default function EntryList() {
   const [entries, setEntries] = useState([]);
+  const [newEntry, setNewEntry] = useState('');
   const auth = useAuth;
 
   useEffect(() => {
@@ -13,10 +14,12 @@ export default function EntryList() {
       setEntries(data);
     }
     getData();
-  }, [])
+  }, [entries])
 
   return (
     <>
+      <textarea onChange={(e) => setNewEntry(e.target.value)} />
+      <button />
       {entries.map((entry) => (
         <div key={entry.id}>
           <p>{entry.content}</p>
