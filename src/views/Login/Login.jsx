@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import { signInUser, signUpUser } from '../../services/user';
@@ -14,8 +14,6 @@ export default function Login() {
   const location = useLocation();
 
   const { from } = location.state || { from: { pathname: '/' } };
-
-  auth.user && history.replace(from);
   
   // need to refactor to clear up some duplicate code
   const handleSubmit = async (e) => {
@@ -23,11 +21,12 @@ export default function Login() {
     try {
       if (authType === 'signin') {
         const authedUser = await signInUser({ email, password });
-        console.log(authedUser);
         auth.setUser(authedUser.email);
+        history.replace(from);
       } else {
         const authedUser = await signUpUser({ email, password });
         auth.setUser(authedUser.email);
+        history.replace(from);
       }
     } catch (error) {
       setErrorMessage(error.message);
@@ -54,7 +53,7 @@ export default function Login() {
       <p>{errorMessage}</p>
       <form 
         className={style.authForm}
-        onSubmit={handleSubmit}
+        onSubmit={(e) => handleSubmit(e)}
       >
         <label>
           <input
